@@ -1,7 +1,12 @@
 import { Pool } from 'pg';
 import { config } from '../config.js';
 
-export const pool = new Pool({ connectionString: config.databaseUrl });
+const isRender = (config.databaseUrl || '').includes('.render.com');
+
+export const pool = new Pool({
+  connectionString: config.databaseUrl,
+  ssl: isRender ? { rejectUnauthorized: false } : false
+});
 export function getPool() {
   return pool;
 }
